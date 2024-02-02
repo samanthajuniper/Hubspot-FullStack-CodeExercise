@@ -1,3 +1,3 @@
 import '../styles/index.css';
 
-console.log('App Ready');
+console.log('App Running...');
