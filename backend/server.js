@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
-const port = process.env.SERVER_PORT || 3001 ;
 const mediaRouter = require('./routes/media');
+const port = process.env.SERVER_PORT || 3001 ;
 
 app.get('/', (_, res) => {
   res.json({ message: 'Hello World' });
