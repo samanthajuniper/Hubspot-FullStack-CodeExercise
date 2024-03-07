@@ -16,11 +16,19 @@ router.get('/', check().trim().escape(), async function(req, res) {
     const offset = req.query.offset || 0; // Default offset to 0 if not provided
 
     const data = await getData(years, genres, searchText, type, limit, offset);
+    console.log("data", data)
+    res.header('Access-Control-Allow-Origin', 'http://localhost:1234');
+    // excluding unused methods
+    res.header('Access-Control-Allow-Methods', 'GET');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+
+    // Send the response with status 200 and JSON data
     res.status(200).json(data);
   } catch(error) {
     console.error(`Error fetching media `, error.message);
     res.status(500).json({ message: error.message });
   }
 });
+
 
 export default router;

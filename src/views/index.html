@@ -12,6 +12,42 @@
     <title>Candidate Exercise</title>
   </head>
 
+  <script>
+  async function fetchData() {
+      console.log("Fetching data");
+    const endpoint = 'http://localhost:3001/media?';  
+    const queryParams = new URLSearchParams({
+      year: '1981',  
+      genre: 'Action', 
+      // searchText: 'example', 
+      type: 'movie',  
+      limit: 10,  
+      offset: 0  
+    });
+
+    try {
+      console.log("Try")
+      const response = await fetch(endpoint + queryParams, {
+        method: 'GET',
+      });
+
+      console.log("response", response)
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data. Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('Fetched Data:', data);
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+  }
+
+  // Call the fetch function when the page loads
+  fetchData();
+</script>
+
   <body>
     <div class="exercise-header">
       <h1>Exercise</h1>
