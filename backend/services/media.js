@@ -1,10 +1,10 @@
-const db = require('./db');
+import { query } from './db.js';
 
 function getData() {
-  const rows = db.query('SELECT * FROM Media');
+  const rows = query('SELECT * FROM Media');
   return rows;
 }
 
-module.exports = {
+export default {
   getData
 }

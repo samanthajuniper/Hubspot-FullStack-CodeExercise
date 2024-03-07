@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import mediaRouter from './routes/media.js';
+
 const app = express();
-const mediaRouter = require('./routes/media');
 const port = process.env.SERVER_PORT || 3001 ;
 
 app.get('/', (_, res) => {

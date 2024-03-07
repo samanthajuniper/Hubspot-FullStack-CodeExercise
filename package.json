@@ -8,7 +8,7 @@
     "start": "parcel serve src/views/index.html --open",
     "serve": "node backend/server.js",
     "dev": "nodemon backend/server.js",
-    "test": "echo \"No test specified, maybe you should add some? :)\" && exit 1",  
+    "test": "echo \"No test specified, maybe you should add some? :)\" && exit 1",
     "db:setup": "sqlite3 database.db < create_database.sql",
     "db:hydrate": "node scripts/hydrate_db.js"
   },
@@ -21,6 +21,8 @@
     "parcel": "^2.10.3"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
+    "eslint": "^8.57.0",
+    "nodemon": "^3.0.2",
+    "prettier": "^3.2.5"
   }
 }
