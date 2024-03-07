@@ -3,12 +3,14 @@
   "version": "1.1.0",
   "description": "A take-home exercise for the HubSpot Web-Team",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "parcel serve src/views/index.html --open",
     "serve": "node backend/server.js",
     "dev": "nodemon backend/server.js",
-    "test": "echo \"No test specified, maybe you should add some? :)\" && exit 1",
-    "db:setup": "sqlite3 database.db < create_database.sql"
+    "test": "echo \"No test specified, maybe you should add some? :)\" && exit 1",  
+    "db:setup": "sqlite3 database.db < create_database.sql",
+    "db:hydrate": "node scripts/hydrate_db.js"
   },
   "author": "HubSpot Marketing Web-Team",
   "license": "ISC",
