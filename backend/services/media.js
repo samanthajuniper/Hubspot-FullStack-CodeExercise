@@ -19,10 +19,8 @@ function getData(year, genre) {
     }
   }
 
-  const rows = db.query(`SELECT * FROM Media${q}`);
+  const rows = query(`SELECT * FROM Media${q}`);
   return rows;
 }
 
-export default {
-  getData
-}
+export default getData
