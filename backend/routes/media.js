@@ -1,9 +1,12 @@
 import { Router } from 'express';
+import { check } from 'express-validator';
 import getData from '../services/media.js';
 
 const router = Router();
 
-router.get('/', async function(req, res) {
+// TODO
+// break out into separate functions: sanitization/validation, formatting, request
+router.get('/', check().trim().escape(), async function(req, res) {
   try {
     const years = req.query.year ? req.query.year.split(',') : [];
     const genres = req.query.genre ? req.query.genre.split(',') : [];

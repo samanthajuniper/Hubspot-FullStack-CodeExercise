@@ -7,6 +7,8 @@ const knexConfig = {
     filename: path.resolve('database.db'),
     fileMustExist: true,
   },
+  useNullAsDefault: true,
+  wrapIdentifier: (value, origImpl) => origImpl(value.toLowerCase()),
 };
 
 const knexInstance = knex(knexConfig);
@@ -43,7 +45,7 @@ function getData(years, genres, searchText, type, limit, offset) {
       }
 
       if (type) {
-        builder.andWhere('type', type); // Adjust the column name based on your database structure
+        builder.andWhere('type', type);
       }
 
       if (limit) {
