@@ -1,26 +1,64 @@
-import { query } from './db.js';
+import knex from 'knex';
+import path from 'path';
 
-// todo use query builder such as Knex
-function getData(year, genre) {
-  let q = '';
+const knexConfig = {
+  client: 'better-sqlite3',
+  connection: {
+    filename: path.resolve('database.db'),
+    fileMustExist: true,
+  },
+};
 
-  if (year !== undefined || genre !== undefined) {
-    q += ' WHERE ';
+const knexInstance = knex(knexConfig);
 
-    if (year !== undefined) {
-      q += ` year = ${year}`;
-    }
+// many genres and years + title text search + type + pagination
+function getData(years, genres, searchText, type, limit, offset) {
+  console.log("years", years);
+  console.log("genres", genres);
+  console.log("searchText", searchText);
+  console.log("type", type);
+  console.log("limit", limit);
+  console.log("offset", offset);
 
-    if (genre !== undefined) {
-      if (year !== undefined) {
-        q += ' AND ';
+  return knexInstance('Media')
+    .modify((builder) => {
+      if (years && years.length > 0) {
+        builder.whereIn('year', years);
       }
-      q += ` genre LIKE '%${genre}%'`; // Using LIKE for pattern matching
-    }
-  }
 
-  const rows = query(`SELECT * FROM Media${q}`);
-  return rows;
+      if (genres && genres.length > 0) {
+        builder.andWhere((innerBuilder) => {
+          genres.forEach((genre, index) => {
+            if (index > 0) {
+              innerBuilder.orWhere('genre', 'ilike', `%${genre}%`);
+            } else {
+              innerBuilder.where('genre', 'ilike', `%${genre}%`);
+            }
+          });
+        });
+      }
+
+      if (searchText) {
+        builder.andWhere('title', 'ilike', `%${searchText}%`);
+      }
+
+      if (type) {
+        builder.andWhere('type', type); // Adjust the column name based on your database structure
+      }
+
+      if (limit) {
+        builder.limit(limit);
+      }
+
+      if (offset) {
+        builder.offset(offset);
+      }
+    })
+    .select('*');
 }
 
-export default getData
+
+
+
+export default getData;
+
