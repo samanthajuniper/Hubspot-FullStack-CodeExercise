@@ -48,6 +48,7 @@ const reducer = (state: State, action: Action): State => {
 
 const MediaView = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
+  console.log('🚀 ~ MediaView ~ state:', state)
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState<string | null>(null)
   const [mediaData, setMediaData] = useState<MediaItem[] | null>(null)
