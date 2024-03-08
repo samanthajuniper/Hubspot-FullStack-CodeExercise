@@ -1,22 +1,22 @@
 import { Router } from 'express';
-import { check } from 'express-validator';
 import getData from '../services/media.js';
 
 const router = Router();
 
-// TODO
-// break out into separate functions: sanitization/validation, formatting, request
-router.get('/', check().trim().escape(), async function(req, res) {
+// TODO:
+// security: sanitization & validation of query params
+router.get('/', async function(req, res) {
   try {
-    const years = req.query.year ? req.query.year.split(',') : [];
-    const genres = req.query.genre ? req.query.genre.split(',') : [];
+    console.log("query params",req.query.years)
+    const years = req.query.years ? req.query.years.split(',') : [];
+    const genres = req.query.genres ? req.query.genres.split(',') : [];
     const searchText = req.query.searchText || '';
     const type = req.query.type || '';
     const limit = req.query.limit || 10; // Default limit to 10 if not provided
     const offset = req.query.offset || 0; // Default offset to 0 if not provided
 
     const data = await getData(years, genres, searchText, type, limit, offset);
-    console.log("data", data)
+    // console.log("data", data)
     res.header('Access-Control-Allow-Origin', 'http://localhost:1234');
     // excluding unused methods
     res.header('Access-Control-Allow-Methods', 'GET');

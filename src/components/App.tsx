@@ -1,2 +1,9 @@
-const App = () => <div>Apps</div>;
-export default App;
+import MediaView from '../views/MediaView'
+
+const App = () => (
+  <>
+    <MediaView />
+  </>
+)
+
+export default App

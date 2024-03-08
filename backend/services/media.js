@@ -16,11 +16,11 @@ const knexInstance = knex(knexConfig);
 // many genres and years + title text search + type + pagination
 function getData(years, genres, searchText, type, limit, offset) {
   console.log("years", years);
-  console.log("genres", genres);
-  console.log("searchText", searchText);
-  console.log("type", type);
-  console.log("limit", limit);
-  console.log("offset", offset);
+  // console.log("genres", genres);
+  // console.log("searchText", searchText);
+  // console.log("type", type);
+  // console.log("limit", limit);
+  // console.log("offset", offset);
 
   return knexInstance('Media')
     .modify((builder) => {
