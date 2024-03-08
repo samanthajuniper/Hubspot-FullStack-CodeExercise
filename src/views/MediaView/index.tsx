@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useReducer } from 'react'
+import React, { useState, useEffect, useReducer, useCallback } from 'react'
 import fetchMedia, { FetchMediaResponse, MediaItem } from './utils/fetchMedia'
-interface State {
+import FilterBar from '../../components/FilterBar'
+export interface State {
   years?: string[]
   genres?: string[]
   searchText?: string
@@ -9,7 +10,7 @@ interface State {
   offset?: number
 }
 
-type Action =
+export type Action =
   | { type: 'SET_YEARS'; payload: string[] }
   | { type: 'SET_GENRES'; payload: string[] }
   | { type: 'SET_SEARCH_TEXT'; payload: string }
@@ -22,8 +23,8 @@ const initialState: State = {
   genres: [],
   searchText: '',
   type: '',
-  limit: 5,
-  offset: 0,
+  // limit: 5,
+  // offset: 0,
 }
 
 const reducer = (state: State, action: Action): State => {
@@ -53,17 +54,13 @@ const MediaView = () => {
   // const [pagination, setPagination] = useState<PaginationInfo | null>(null)
 
   useEffect(() => {
-    let ignore = false
-
     const handleFetchMedia = async () => {
       setLoading(true)
       setError(null)
 
       const { error, data }: FetchMediaResponse = await fetchMedia(state)
 
-      if (ignore) {
-        return
-      } else if (error) {
+      if (error) {
         setError(error)
       } else {
         setMediaData(data)
@@ -76,10 +73,6 @@ const MediaView = () => {
     }
 
     handleFetchMedia()
-
-    return () => {
-      ignore = true
-    }
   }, [state])
 
   {
@@ -88,6 +81,14 @@ const MediaView = () => {
   // const handlePageChange = (newOffset: number) => {
   //   dispatch({ type: 'SET_OFFSET', payload: newOffset })
   // }
+  // @ts-ignore
+  // const handleFilterChange = React.useCallback(
+  //   ({ type, payload }) => {
+  //     console.log('in the callback')
+  //     dispatch({ type, payload })
+  //   },
+  //   [dispatch],
+  // )
 
   if (error) {
     return <div>{error}</div>
@@ -99,6 +100,7 @@ const MediaView = () => {
 
   return (
     <div>
+      <FilterBar dispatch={dispatch} state={state} />
       <ul>
         {mediaData?.map(item => {
           return <li key={item.id}>{item.title}</li>
@@ -127,87 +129,3 @@ const MediaView = () => {
 }
 
 export default MediaView
-
-// import React, { useState, useEffect } from 'react'
-// import fetchMedia, {
-//   FetchMediaResponse,
-//   PaginationInfo,
-// } from './utils/fetchMedia'
-
-// const MediaView = () => {
-//   const [loading, setLoading] = useState(true)
-//   const [error, setError] = useState<string | null>(null)
-//   const [mediaData, setMediaData] = useState<any[] | null>(null)
-//   const [pagination, setPagination] = useState<PaginationInfo | null>(null)
-
-//   useEffect(() => {
-//     let ignore = false
-
-//     const handleFetchMedia = async (offset?: number) => {
-//       setLoading(true)
-//       setError(null)
-
-//       const { error, data, pagination }: FetchMediaResponse = await fetchMedia({
-//         years: ['1993'],
-//       })
-
-//       if (ignore) {
-//         return
-//       } else if (error) {
-//         setError(error)
-//       } else {
-//         setMediaData(data)
-//         setPagination(pagination)
-//       }
-
-//       setLoading(false)
-//     }
-
-//     handleFetchMedia()
-
-//     return () => {
-//       ignore = true
-//     }
-//   }, []) // Empty dependency array for initial load
-
-//   const handlePageChange = (newOffset: number) => {
-//     handleFetchMedia({ offset: newOffset })
-//   }
-
-//   if (error) {
-//     return <div>{error}</div>
-//   }
-
-//   if (loading) {
-//     return <div>loading</div>
-//   }
-
-//   return (
-//     <div>
-//       <ul>
-//         {mediaData?.map(item => {
-//           return <li key={item.id}>{item.title}</li>
-//         })}
-//       </ul>
-//       {pagination && (
-//         <div>
-//           <button
-//             onClick={() => handlePageChange(pagination.currentPage - 1)}
-//             disabled={pagination.currentPage === 1}
-//           >
-//             Previous
-//           </button>
-//           <span>{`Page ${pagination.currentPage} of ${pagination.totalPages}`}</span>
-//           <button
-//             onClick={() => handlePageChange(pagination.currentPage + 1)}
-//             disabled={pagination.currentPage === pagination.totalPages}
-//           >
-//             Next
-//           </button>
-//         </div>
-//       )}
-//     </div>
-//   )
-// }
-
-// export default MediaView

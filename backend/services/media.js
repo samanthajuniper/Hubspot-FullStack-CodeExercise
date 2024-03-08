@@ -16,11 +16,11 @@ const knexInstance = knex(knexConfig);
 // many genres and years + title text search + type + pagination
 function getData(years, genres, searchText, type, limit, offset) {
   console.log("years", years);
-  // console.log("genres", genres);
-  // console.log("searchText", searchText);
-  // console.log("type", type);
-  // console.log("limit", limit);
-  // console.log("offset", offset);
+  console.log("genres", genres);
+  console.log("searchText", searchText);
+  console.log("type", type);
+  console.log("limit", limit);
+  console.log("offset", offset);
 
   return knexInstance('Media')
     .modify((builder) => {
@@ -32,16 +32,16 @@ function getData(years, genres, searchText, type, limit, offset) {
         builder.andWhere((innerBuilder) => {
           genres.forEach((genre, index) => {
             if (index > 0) {
-              innerBuilder.orWhere('genre', 'ilike', `%${genre}%`);
+              innerBuilder.orWhere('genre', 'like', `%${genre}%`);
             } else {
-              innerBuilder.where('genre', 'ilike', `%${genre}%`);
+              innerBuilder.where('genre', 'like', `%${genre}%`);
             }
           });
         });
       }
 
       if (searchText) {
-        builder.andWhere('title', 'ilike', `%${searchText}%`);
+        builder.andWhere('title', 'like', `%${searchText}%`);
       }
 
       if (type) {
@@ -64,3 +64,5 @@ function getData(years, genres, searchText, type, limit, offset) {
 
 export default getData;
 
+
+// sqlite> SELECT (SELECT COUNT(*) FROM Media WHERE year = '1981') as total, m.* from Media m where genre like '%action%' order by title limit 1 offset 1;
