@@ -6,7 +6,7 @@ describe("<App />", () => {
   const renderApp = () => {
     render(<App />);
     const { getByText } = screen;
-    const title = getByText(/React (Parcel + TypeScript)/i);
+    const title = getByText(/Apps/i);
     return {
       title
     };
