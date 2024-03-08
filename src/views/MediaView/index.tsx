@@ -17,6 +17,7 @@ export type Action =
   | { type: 'SET_TYPE'; payload: string }
   | { type: 'SET_LIMIT'; payload: number }
   | { type: 'SET_OFFSET'; payload: number }
+  | { type: 'CLEAR_FILTERS' }
 
 const initialState: State = {
   years: [],
@@ -41,6 +42,8 @@ const reducer = (state: State, action: Action): State => {
       return { ...state, limit: action.payload }
     case 'SET_OFFSET':
       return { ...state, offset: action.payload }
+    case 'CLEAR_FILTERS':
+      return { ...initialState, offset: state.offset, limit: state.limit }
     default:
       return state
   }

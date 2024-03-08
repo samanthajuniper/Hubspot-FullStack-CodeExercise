@@ -4,6 +4,7 @@ import MultiSelectCheckmarks from '../MultiSelect'
 import { Action, State } from '../../views/MediaView'
 import SearchInput from '../SearchInput'
 import MediaRadioGroup from '../RadioGroup'
+import { Button } from '@mui/material'
 
 const genreOptions = ['action', 'adventure', 'comedy']
 const yearsOptions = ['1981', '1987']
@@ -34,6 +35,10 @@ const FilterBar: React.FC<FilterBarProps> = ({ dispatch, state }) => {
     dispatch({ type: 'SET_TYPE', payload: type === 'all' ? null : type })
   }, [])
 
+  const handleClearFilters = useCallback(() => {
+    dispatch({ type: 'CLEAR_FILTERS' })
+  }, [])
+
   return (
     <>
       <Stack direction="row" justifyContent="space-between" spacing={2}>
@@ -58,10 +63,15 @@ const FilterBar: React.FC<FilterBarProps> = ({ dispatch, state }) => {
           />
         </div>
         <div>
-          <SearchInput
-            defaultValue={searchText}
-            onChange={handleSearchTextChange}
-          />
+          <Stack spacing={6} alignItems="flex-end">
+            <SearchInput
+              defaultValue={searchText}
+              onChange={handleSearchTextChange}
+            />
+            <Button variant="outlined" onClick={handleClearFilters}>
+              Clear All Filters
+            </Button>
+          </Stack>
         </div>
       </Stack>
     </>
