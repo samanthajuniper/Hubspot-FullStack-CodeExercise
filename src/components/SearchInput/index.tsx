@@ -14,7 +14,6 @@ const SearchInput: React.FC<SearchInputProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = React.useState<string | null>()
   const debouncedSearchTerm = useDebounce(searchTerm, 300)
-  console.log('🚀 ~ debouncedSearchTerm :', debouncedSearchTerm)
 
   React.useEffect(() => {
     if (debouncedSearchTerm || debouncedSearchTerm === '') {

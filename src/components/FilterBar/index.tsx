@@ -3,6 +3,7 @@ import Stack from '@mui/material/Stack'
 import MultiSelectCheckmarks from '../MultiSelect'
 import { Action, State } from '../../views/MediaView'
 import SearchInput from '../SearchInput'
+import MediaRadioGroup from '../RadioGroup'
 
 const genreOptions = ['action', 'adventure', 'comedy']
 const yearsOptions = ['1981', '1987']
@@ -13,7 +14,7 @@ interface FilterBarProps {
 }
 
 const FilterBar: React.FC<FilterBarProps> = ({ dispatch, state }) => {
-  const { genres, years, searchText } = state
+  const { genres, years, searchText, type } = state
 
   const handleGenresChange = useCallback((selectedOptions: string[]) => {
     dispatch({ type: 'SET_GENRES', payload: selectedOptions })
@@ -25,6 +26,12 @@ const FilterBar: React.FC<FilterBarProps> = ({ dispatch, state }) => {
 
   const handleSearchTextChange = useCallback((searchTerm: string) => {
     dispatch({ type: 'SET_SEARCH_TEXT', payload: searchTerm })
+  }, [])
+
+  const handleTypeChange = useCallback((type: string) => {
+    // TODO:
+    // @ts-ignore
+    dispatch({ type: 'SET_TYPE', payload: type === 'all' ? null : type })
   }, [])
 
   return (
@@ -45,6 +52,10 @@ const FilterBar: React.FC<FilterBarProps> = ({ dispatch, state }) => {
               label="years"
             />
           </Stack>
+          <MediaRadioGroup
+            value={!type ? 'all' : type}
+            onChange={handleTypeChange}
+          />
         </div>
         <div>
           <SearchInput
