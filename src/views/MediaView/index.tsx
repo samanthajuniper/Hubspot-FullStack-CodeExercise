@@ -3,6 +3,7 @@ import FilterBar from '../../components/FilterBar'
 import MediaCard from '../../components/MediaCard'
 import Grid from '@mui/material/Unstable_Grid2'
 import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
 import NoResultsMessage from '../../components/NoResultsMessage'
 import fetchMedia from './utils/fetchMedia'
 import { FetchMediaResponse, MediaItem } from '../../types/interfaces/MediaData'
@@ -46,12 +47,12 @@ const MediaView = () => {
     initialMediaFilterState,
   )
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>()
   const [mediaData, setMediaData] = useState<MediaItem[] | null>(null)
 
   useEffect(() => {
     let ignore = false
-    console.log('state changed', state)
+
     const handleFetchMediaData = async () => {
       setLoading(true)
       setError(null)
@@ -89,12 +90,8 @@ const MediaView = () => {
     [dispatch],
   )
 
-  if (error) {
-    return <NoResultsMessage message={error} />
-  }
-
   return (
-    <div data-testid="media-view">
+    <Stack data-testid="media-view" flexDirection="column">
       {loading && (
         <Backdrop
           sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
@@ -107,14 +104,25 @@ const MediaView = () => {
       {!mediaData?.length && (
         <NoResultsMessage message="No items matched your search." />
       )}
-      <Box sx={{ flexGrow: 1 }}>
+      {error && (
+        <NoResultsMessage
+          message={`Error: ${error} Please refresh to try again.`}
+        />
+      )}
+      <Box sx={{ width: 'fit-content' }}>
         <Grid
           container
-          spacing={{ xs: 2, md: 3 }}
-          columns={{ xs: 4, sm: 8, md: 12, lg: 16 }}
+          spacing={3}
+          display="flex"
+          justifyContent="space-around"
         >
           {mediaData?.map(item => (
-            <Grid xs={2} sm={4} md={4} key={item.id}>
+            <Grid
+              xs={4}
+              key={item.id}
+              width="fit-content"
+              justifyContent="space-around"
+            >
               <MediaCard
                 title={item.title}
                 year={item.year}
@@ -126,7 +134,7 @@ const MediaView = () => {
           ))}
         </Grid>
       </Box>
-    </div>
+    </Stack>
   )
 }
 
