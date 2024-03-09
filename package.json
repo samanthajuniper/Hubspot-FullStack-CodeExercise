@@ -6,7 +6,7 @@
   "scripts": {
     "start": "parcel src/index.html",
     "serve": "node backend/server.js",
-    "test:fe": "jest src",
+    "test:fe": "jest src --watch",
     "dev": "nodemon backend/server.js",
     "db:setup": "sqlite3 database.db < create_database.sql",
     "db:hydrate": "node scripts/hydrate_db.js"

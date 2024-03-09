@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import Stack from '@mui/material/Stack'
 import MultiSelectCheckmarks from '../FilterControls/MultiSelect'
 
@@ -21,6 +21,10 @@ interface FilterBarProps {
 const FilterBar: React.FC<FilterBarProps> = ({ dispatch, state }) => {
   const { genres, years, searchText, type } = state
 
+  useEffect(() => {
+    console.log('FILTER BAR🚀 ~ genres, years, searchText, type :', searchText)
+  }, [state])
+
   const createFilterHandler = <K extends keyof MediaFilterState, T>(
     type: MediaFilterActionTypes,
     key?: K,
@@ -31,7 +35,8 @@ const FilterBar: React.FC<FilterBarProps> = ({ dispatch, state }) => {
         const payloadValue = transformPayload ? transformPayload(value) : value
         dispatch({
           type,
-          payload: payloadValue && key ? { [key]: payloadValue } : {},
+          payload:
+            payloadValue !== undefined && key ? { [key]: payloadValue } : {},
         })
       },
       [dispatch, type, key, transformPayload],

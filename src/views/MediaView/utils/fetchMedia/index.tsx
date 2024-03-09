@@ -14,20 +14,17 @@ const fetchMedia = async (
 ): Promise<FetchMediaResponse> => {
   const { years, genres, searchText, type, limit, offset } = props
 
-  //   @ts-ignore
   const queryParams = new URLSearchParams({
     ...(years?.length && { years: years.join(',') }),
     ...(genres?.length && { genres: genres.join(',') }),
     ...(searchText && { searchText }),
     ...(type && { type }),
-    ...(limit && { limit }),
-    ...(offset && { offset }),
-  })
+  } as Record<string, string>)
 
-  const endpoint = `http://localhost:3001/?${queryParams}`
+  const getMediaEndpoint = `${process.env.REACT_APP_API_BASE_URL}?${queryParams}`
 
   try {
-    const response = await fetch(endpoint, { method: 'GET' })
+    const response = await fetch(getMediaEndpoint, { method: 'GET' })
     if (!response.ok) {
       throw new Error(`Failed to fetch data. Status: ${response.status}`)
     }

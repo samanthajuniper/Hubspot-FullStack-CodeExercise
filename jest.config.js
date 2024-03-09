@@ -4,7 +4,7 @@ export default {
     "<rootDir>/src"
   ],
   "transform": {
-    "^.+\\.(ts|tsx)$": "ts-jest"
+    "^.+\\.(ts|tsx)$": "ts-jest",
   },
  "setupFilesAfterEnv": [
    "<rootDir>/src/setupTests.ts"

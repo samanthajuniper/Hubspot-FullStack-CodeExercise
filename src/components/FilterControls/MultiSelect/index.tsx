@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
@@ -22,6 +22,10 @@ const MultiSelectCheckmarks: React.FC<MultiSelectProps> = ({
 }) => {
   const [internalSelectedOptions, setInternalSelectedOptions] =
     useState<string[]>(defaultOptions)
+
+  useEffect(() => {
+    setInternalSelectedOptions(defaultOptions)
+  }, [defaultOptions])
 
   const handleChange = (
     event: SelectChangeEvent<typeof internalSelectedOptions>,

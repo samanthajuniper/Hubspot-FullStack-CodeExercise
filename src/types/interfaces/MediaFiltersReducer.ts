@@ -16,8 +16,20 @@ export enum MediaFilterActionTypes {
 }
 
 export type MediaFilterDispatchParams =
-  | { type: MediaFilterActionTypes.SET_YEARS; payload: string[] }
-  | { type: MediaFilterActionTypes.SET_GENRES; payload: string[] }
-  | { type: MediaFilterActionTypes.SET_SEARCH_TEXT; payload: string }
-  | { type: MediaFilterActionTypes.SET_TYPE; payload: string }
+  | {
+      type: MediaFilterActionTypes.SET_YEARS
+      payload: { [key: string]: string[] }
+    }
+  | {
+      type: MediaFilterActionTypes.SET_GENRES
+      payload: { [key: string]: string[] }
+    }
+  | {
+      type: MediaFilterActionTypes.SET_SEARCH_TEXT
+      payload: { [key: string]: string }
+    }
+  | {
+      type: MediaFilterActionTypes.SET_TYPE
+      payload: { [key: string]: string }
+    }
   | { type: MediaFilterActionTypes.CLEAR_FILTERS }

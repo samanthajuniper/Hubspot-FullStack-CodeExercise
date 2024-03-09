@@ -1,19 +1,18 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import App from "./App";
+import { render, screen } from '@testing-library/react'
+import App from './App'
 
-describe("<App />", () => {
+describe('<App />', () => {
   const renderApp = () => {
-    render(<App />);
-    const { getByText } = screen;
-    const title = getByText(/Apps/i);
+    render(<App />)
+    const { getByTestId } = screen
+    const mediaViewComponent = getByTestId('media-view')
     return {
-      title
-    };
-  };
+      mediaViewComponent,
+    }
+  }
 
-  it("renders the page title", () => {
-    const { title } = renderApp();
-    expect(title).toBeInTheDocument();
-  });
-});
+  it('renders the page withe MediaView/>', () => {
+    const { mediaViewComponent } = renderApp()
+    expect(mediaViewComponent).toBeInTheDocument()
+  })
+})

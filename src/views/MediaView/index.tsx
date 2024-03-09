@@ -7,9 +7,11 @@ import NoResultsMessage from '../../components/NoResultsMessage'
 import fetchMedia from './utils/fetchMedia'
 import { FetchMediaResponse, MediaItem } from '../../types/interfaces/MediaData'
 import {
-  MediaFilterActionTypes,
+  MediaFilterDispatchParams,
   MediaFilterState,
 } from '../../types/interfaces/MediaFiltersReducer'
+import Backdrop from '@mui/material/Backdrop'
+import CircularProgress from '@mui/material/CircularProgress'
 
 const initialMediaFilterState: MediaFilterState = {
   years: [],
@@ -18,18 +20,18 @@ const initialMediaFilterState: MediaFilterState = {
   type: '',
 }
 
-// TODO: fix TS
 const mediaFiltersReducer = (
   state: MediaFilterState,
-  action: any,
+  action: MediaFilterDispatchParams,
 ): MediaFilterState => {
   switch (action.type) {
     case 'SET_YEARS':
     case 'SET_GENRES':
     case 'SET_SEARCH_TEXT':
     case 'SET_TYPE':
-      return { ...state, ...(action.payload as Record<string, any>) }
+      return { ...state, ...action.payload }
     case 'CLEAR_FILTERS':
+      console.log('clearing')
       return {
         ...initialMediaFilterState,
       }
@@ -48,11 +50,17 @@ const MediaView = () => {
   const [mediaData, setMediaData] = useState<MediaItem[] | null>(null)
 
   useEffect(() => {
-    const handleFetchMedia = async () => {
+    let ignore = false
+    console.log('state changed', state)
+    const handleFetchMediaData = async () => {
       setLoading(true)
       setError(null)
+
       const { error, data }: FetchMediaResponse = await fetchMedia(state)
-      if (error) {
+
+      if (ignore) {
+        return
+      } else if (error) {
         setError(error)
       } else {
         setMediaData(data)
@@ -61,7 +69,11 @@ const MediaView = () => {
       setLoading(false)
     }
 
-    handleFetchMedia()
+    handleFetchMediaData()
+
+    return () => {
+      ignore = true
+    }
   }, [state])
 
   const memoizedDispatch: ({
@@ -81,12 +93,16 @@ const MediaView = () => {
     return <NoResultsMessage message={error} />
   }
 
-  if (loading) {
-    return <div>loading</div>
-  }
-
   return (
-    <div>
+    <div data-testId="media-view">
+      {loading && (
+        <Backdrop
+          sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
+          open={true}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <FilterBar dispatch={memoizedDispatch} state={state} />
       {!mediaData?.length && (
         <NoResultsMessage message="No items matched your search." />

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
 import useDebounce from '../../../hooks/useDebounce'
@@ -12,10 +12,14 @@ const MediaTitleSearchInput: React.FC<MediaTitleSearchInputProps> = ({
   defaultValue,
   onChange,
 }) => {
-  const [searchTerm, setSearchTerm] = React.useState<string | null>()
+  const [searchTerm, setSearchTerm] = React.useState<string | undefined>()
   const debouncedSearchTerm = useDebounce(searchTerm, 400)
 
-  React.useEffect(() => {
+  useEffect(() => {
+    setSearchTerm(defaultValue)
+  }, [defaultValue])
+
+  useEffect(() => {
     if (debouncedSearchTerm || debouncedSearchTerm === '') {
       onChange(debouncedSearchTerm)
     }
@@ -30,7 +34,7 @@ const MediaTitleSearchInput: React.FC<MediaTitleSearchInputProps> = ({
       <TextField
         label="Title Search"
         onChange={handleChange}
-        defaultValue={defaultValue}
+        value={searchTerm}
       />
     </FormControl>
   )
