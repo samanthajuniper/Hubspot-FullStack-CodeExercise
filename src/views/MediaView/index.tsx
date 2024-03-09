@@ -4,6 +4,7 @@ import FilterBar from '../../components/FilterBar'
 import MediaCard from '../../components/MediaCard'
 import Grid from '@mui/material/Unstable_Grid2'
 import Box from '@mui/material/Box'
+import NoResultsMessage from '../../components/NoResultsMessage'
 
 export interface State {
   years?: string[]
@@ -58,7 +59,6 @@ const MediaView = () => {
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState<string | null>(null)
   const [mediaData, setMediaData] = useState<MediaItem[] | null>(null)
-  console.log('🚀 ~ MediaView ~ mediaData:', mediaData)
   // const [pagination, setPagination] = useState<PaginationInfo | null>(null)
 
   useEffect(() => {
@@ -109,6 +109,7 @@ const MediaView = () => {
   return (
     <div>
       <FilterBar dispatch={dispatch} state={state} />
+      {!mediaData?.length && <NoResultsMessage />}
       <Box sx={{ flexGrow: 1 }}>
         <Grid
           container

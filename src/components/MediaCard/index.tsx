@@ -5,6 +5,10 @@ import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import { MediaItem } from '../../views/MediaView/utils/fetchMedia'
 
+const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+  e.currentTarget.onerror = null
+  e.currentTarget.src = `https://placehold.co/400x590?text=No+Image&font=roboto`
+}
 const MediaCard: React.FC<Omit<MediaItem, 'id'>> = ({
   title,
   year,
@@ -12,11 +16,6 @@ const MediaCard: React.FC<Omit<MediaItem, 'id'>> = ({
   poster,
   type,
 }) => {
-  const handleImageError = e => {
-    e.target.onerror = null
-    e.target.src = `https://placehold.co/400x590?text=No+Image&font=roboto`
-  }
-
   return (
     <Card sx={{ width: 400, height: 700 }}>
       <CardMedia
@@ -25,6 +24,7 @@ const MediaCard: React.FC<Omit<MediaItem, 'id'>> = ({
         image={poster}
         height="590"
         onError={handleImageError}
+        loading="lazy"
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
