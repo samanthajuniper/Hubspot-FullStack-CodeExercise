@@ -1,17 +1,20 @@
 import React, { useCallback } from 'react'
 import Stack from '@mui/material/Stack'
 import MultiSelectCheckmarks from '../MultiSelect'
-import { Action, State } from '../../views/MediaView'
 import SearchInput from '../SearchInput'
 import MediaRadioGroup from '../RadioGroup'
 import { Button } from '@mui/material'
+import {
+  MediaFilterAction,
+  MediaFilterState,
+} from '../../types/interfaces/MediaFiltersReducer'
 
 const genreOptions = ['action', 'adventure', 'comedy']
 const yearsOptions = ['1981', '1987']
 
 interface FilterBarProps {
-  dispatch: React.Dispatch<Action>
-  state: State
+  dispatch: React.Dispatch<MediaFilterAction>
+  state: MediaFilterState
 }
 
 const FilterBar: React.FC<FilterBarProps> = ({ dispatch, state }) => {

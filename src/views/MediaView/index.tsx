@@ -6,26 +6,12 @@ import Box from '@mui/material/Box'
 import NoResultsMessage from '../../components/NoResultsMessage'
 import { FetchMediaResponse, MediaItem } from '../../types/interfaces/MediaData'
 import fetchMedia from './utils/fetchMedia'
+import {
+  MediaFilterAction,
+  MediaFilterState,
+} from '../../types/interfaces/MediaFiltersReducer'
 
-export interface State {
-  years?: string[]
-  genres?: string[]
-  searchText?: string
-  type?: string
-  limit?: number
-  offset?: number
-}
-
-export type Action =
-  | { type: 'SET_YEARS'; payload: string[] }
-  | { type: 'SET_GENRES'; payload: string[] }
-  | { type: 'SET_SEARCH_TEXT'; payload: string }
-  | { type: 'SET_TYPE'; payload: string }
-  | { type: 'SET_LIMIT'; payload: number }
-  | { type: 'SET_OFFSET'; payload: number }
-  | { type: 'CLEAR_FILTERS' }
-
-const initialMediaFilterState: State = {
+const initialMediaFilterState: MediaFilterState = {
   years: [],
   genres: [],
   searchText: '',
@@ -34,7 +20,10 @@ const initialMediaFilterState: State = {
   // offset: 0,
 }
 
-const mediaFiltersReducer = (state: State, action: Action): State => {
+const mediaFiltersReducer = (
+  state: MediaFilterState,
+  action: MediaFilterAction,
+): MediaFilterState => {
   switch (action.type) {
     case 'SET_YEARS':
       return { ...state, years: action.payload }
@@ -107,7 +96,7 @@ const MediaView = () => {
   // )
 
   if (error) {
-    return <div>{error}</div>
+    return <NoResultsMessage message={error} />
   }
 
   if (loading) {
@@ -117,7 +106,9 @@ const MediaView = () => {
   return (
     <div>
       <FilterBar dispatch={dispatch} state={state} />
-      {!mediaData?.length && <NoResultsMessage />}
+      {!mediaData?.length && (
+        <NoResultsMessage message="No items matched your search." />
+      )}
       <Box sx={{ flexGrow: 1 }}>
         <Grid
           container

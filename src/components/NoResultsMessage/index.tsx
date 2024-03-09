@@ -9,9 +9,9 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   lineHeight: '60px',
 }))
 
-const NoResultsMessage: React.FC = () => (
+const NoResultsMessage: React.FC<{ message: string }> = ({ message }) => (
   <StyledPaper elevation={2}>
-    <h3> No items matched your search.</h3>
+    <h3>{message}</h3>
   </StyledPaper>
 )
 
