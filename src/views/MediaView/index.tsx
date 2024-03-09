@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useReducer, useCallback } from 'react'
 import fetchMedia, { FetchMediaResponse, MediaItem } from './utils/fetchMedia'
 import FilterBar from '../../components/FilterBar'
+import MediaCard from '../../components/MediaCard'
+import Grid from '@mui/material/Unstable_Grid2'
+import Box from '@mui/material/Box'
+
 export interface State {
   years?: string[]
   genres?: string[]
@@ -51,10 +55,10 @@ const reducer = (state: State, action: Action): State => {
 
 const MediaView = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
-  // console.log('🚀 ~ MediaView ~ state:', state)
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState<string | null>(null)
   const [mediaData, setMediaData] = useState<MediaItem[] | null>(null)
+  console.log('🚀 ~ MediaView ~ mediaData:', mediaData)
   // const [pagination, setPagination] = useState<PaginationInfo | null>(null)
 
   useEffect(() => {
@@ -105,11 +109,28 @@ const MediaView = () => {
   return (
     <div>
       <FilterBar dispatch={dispatch} state={state} />
-      <ul>
-        {mediaData?.map(item => {
-          return <li key={item.id}>{item.title}</li>
-        })}
-      </ul>
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          columns={{ xs: 4, sm: 8, md: 12, lg: 16 }}
+        >
+          {mediaData?.map(item => {
+            return (
+              <Grid xs={2} sm={4} md={4} key={item.id}>
+                <MediaCard
+                  title={item.title}
+                  year={item.year}
+                  genre={item.genre}
+                  poster={item.poster}
+                  type={item.type}
+                />
+              </Grid>
+            )
+          })}
+        </Grid>
+      </Box>
+
       {/* TODO: add pagination in when API is fixed */}
       {/* {pagination && (
         <div>
