@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useReducer, useCallback } from 'react'
-import fetchMedia, { FetchMediaResponse, MediaItem } from './utils/fetchMedia'
+import React, { useState, useEffect, useReducer } from 'react'
 import FilterBar from '../../components/FilterBar'
 import MediaCard from '../../components/MediaCard'
 import Grid from '@mui/material/Unstable_Grid2'
 import Box from '@mui/material/Box'
 import NoResultsMessage from '../../components/NoResultsMessage'
+import { FetchMediaResponse, MediaItem } from '../../types/interfaces/MediaData'
+import fetchMedia from './utils/fetchMedia'
 
 export interface State {
   years?: string[]
@@ -24,7 +25,7 @@ export type Action =
   | { type: 'SET_OFFSET'; payload: number }
   | { type: 'CLEAR_FILTERS' }
 
-const initialState: State = {
+const initialMediaFilterState: State = {
   years: [],
   genres: [],
   searchText: '',
@@ -33,7 +34,7 @@ const initialState: State = {
   // offset: 0,
 }
 
-const reducer = (state: State, action: Action): State => {
+const mediaFiltersReducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'SET_YEARS':
       return { ...state, years: action.payload }
@@ -48,14 +49,21 @@ const reducer = (state: State, action: Action): State => {
     case 'SET_OFFSET':
       return { ...state, offset: action.payload }
     case 'CLEAR_FILTERS':
-      return { ...initialState, offset: state.offset, limit: state.limit }
+      return {
+        ...initialMediaFilterState,
+        offset: state.offset,
+        limit: state.limit,
+      }
     default:
       return state
   }
 }
 
 const MediaView = () => {
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [state, dispatch] = useReducer(
+    mediaFiltersReducer,
+    initialMediaFilterState,
+  )
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState<string | null>(null)
   const [mediaData, setMediaData] = useState<MediaItem[] | null>(null)

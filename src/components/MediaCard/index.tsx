@@ -3,7 +3,7 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
-import { MediaItem } from '../../views/MediaView/utils/fetchMedia'
+import { MediaItem } from '../../types/interfaces/MediaData'
 
 const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
   e.currentTarget.onerror = null
