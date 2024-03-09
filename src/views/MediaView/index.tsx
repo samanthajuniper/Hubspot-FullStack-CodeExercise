@@ -94,7 +94,7 @@ const MediaView = () => {
   }
 
   return (
-    <div data-testId="media-view">
+    <div data-testid="media-view">
       {loading && (
         <Backdrop
           sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import Stack from '@mui/material/Stack'
 import MultiSelectCheckmarks from '../FilterControls/MultiSelect'
 
@@ -19,90 +19,71 @@ interface FilterBarProps {
 }
 
 const FilterBar: React.FC<FilterBarProps> = ({ dispatch, state }) => {
-  const { genres, years, searchText, type } = state
+  const { genres, years, type } = state
+  const searchInputRef = useRef<HTMLInputElement | null>(null)
 
-  useEffect(() => {
-    console.log('FILTER BAR🚀 ~ genres, years, searchText, type :', searchText)
-  }, [state])
+  const handleGenresChange = useCallback((selectedOptions: string[]) => {
+    dispatch({ type: 'SET_GENRES', payload: { genres: selectedOptions } })
+  }, [])
 
-  const createFilterHandler = <K extends keyof MediaFilterState, T>(
-    type: MediaFilterActionTypes,
-    key?: K,
-    transformPayload?: (key: string) => T | null,
-  ) => {
-    return useCallback(
-      (value: any) => {
-        const payloadValue = transformPayload ? transformPayload(value) : value
-        dispatch({
-          type,
-          payload:
-            payloadValue !== undefined && key ? { [key]: payloadValue } : {},
-        })
-      },
-      [dispatch, type, key, transformPayload],
-    )
-  }
-  const handleYearsChange = createFilterHandler(
-    MediaFilterActionTypes.SET_YEARS,
-    'years',
-  )
+  const handleYearsChange = useCallback((selectedOptions: string[]) => {
+    dispatch({ type: 'SET_YEARS', payload: { years: selectedOptions } })
+  }, [])
 
-  const handleGenresChange = createFilterHandler(
-    MediaFilterActionTypes.SET_GENRES,
-    'genres',
-  )
+  const handleSearchTextChange = useCallback((searchTerm: string) => {
+    dispatch({ type: 'SET_SEARCH_TEXT', payload: { searchText: searchTerm } })
+  }, [])
 
-  const handleSearchTextChange = createFilterHandler(
-    MediaFilterActionTypes.SET_SEARCH_TEXT,
-    'searchText',
-  )
+  const handleTypeChange = useCallback((type: string) => {
+    // TODO:
+    // @ts-ignore
+    dispatch({
+      type: 'SET_TYPE',
+      payload: { type: type === 'all' ? null : type },
+    })
+  }, [])
 
-  const handleTypeChange = createFilterHandler(
-    MediaFilterActionTypes.SET_TYPE,
-    'type',
-    (selectedType: string) => (selectedType === 'all' ? null : selectedType),
-  )
+  const handleClearFilters = useCallback(() => {
+    dispatch({ type: 'CLEAR_FILTERS' })
 
-  const handleClearFilters = createFilterHandler(
-    MediaFilterActionTypes.CLEAR_FILTERS,
-  )
+    if (searchInputRef && searchInputRef.current) {
+      searchInputRef.current.value = ''
+    }
+  }, [])
 
   return (
-    <>
-      <Stack direction="row" justifyContent="space-between" spacing={2}>
-        <div>
-          <Stack direction="row" spacing={2}>
-            <MultiSelectCheckmarks
-              options={genreOptions}
-              defaultOptions={genres || []}
-              onClose={handleGenresChange}
-              label="genres"
-            />
-            <MultiSelectCheckmarks
-              options={yearsOptions}
-              defaultOptions={years || []}
-              onClose={handleYearsChange}
-              label="years"
-            />
-          </Stack>
-          <MediaTypeRadioGroup
-            value={!type ? 'all' : type}
-            onChange={handleTypeChange}
+    <Stack direction="row" justifyContent="space-between" spacing={2}>
+      <div>
+        <Stack direction="row" spacing={2}>
+          <MultiSelectCheckmarks
+            options={genreOptions}
+            defaultOptions={genres || []}
+            onClose={handleGenresChange}
+            label="genres"
           />
-        </div>
-        <div>
-          <Stack spacing={6} alignItems="flex-end">
-            <MediaTitleSearchInput
-              defaultValue={searchText}
-              onChange={handleSearchTextChange}
-            />
-            <Button variant="outlined" onClick={handleClearFilters}>
-              Clear All Filters
-            </Button>
-          </Stack>
-        </div>
+          <MultiSelectCheckmarks
+            options={yearsOptions}
+            defaultOptions={years || []}
+            onClose={handleYearsChange}
+            label="years"
+          />
+        </Stack>
+        <MediaTypeRadioGroup
+          value={!type ? 'all' : type}
+          onChange={handleTypeChange}
+        />
+      </div>
+
+      <Stack spacing={6} alignItems="flex-end">
+        <MediaTitleSearchInput
+          onChange={handleSearchTextChange}
+          ref={searchInputRef}
+        />
+        <Button variant="outlined" onClick={handleClearFilters}>
+          Clear All Filters
+        </Button>
       </Stack>
-    </>
+    </Stack>
   )
 }
 
