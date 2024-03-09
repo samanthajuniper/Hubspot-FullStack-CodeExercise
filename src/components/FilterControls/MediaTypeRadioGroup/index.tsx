@@ -5,12 +5,12 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 import FormLabel from '@mui/material/FormLabel'
 
-interface MediaRadioGroupProps {
+interface MediaMediaTypeRadioGroupProps {
   value?: string
   onChange: (type: string) => void
 }
 
-const MediaRadioGroup: React.FC<MediaRadioGroupProps> = ({
+const MediaTypeRadioGroup: React.FC<MediaMediaTypeRadioGroupProps> = ({
   value,
   onChange,
 }) => {
@@ -32,4 +32,4 @@ const MediaRadioGroup: React.FC<MediaRadioGroupProps> = ({
   )
 }
 
-export default React.memo(MediaRadioGroup)
+export default React.memo(MediaTypeRadioGroup)

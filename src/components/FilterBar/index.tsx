@@ -1,13 +1,14 @@
 import React, { useCallback } from 'react'
 import Stack from '@mui/material/Stack'
-import MultiSelectCheckmarks from '../MultiSelect'
-import SearchInput from '../SearchInput'
-import MediaRadioGroup from '../RadioGroup'
+import MultiSelectCheckmarks from '../FilterControls/MultiSelect'
+
 import { Button } from '@mui/material'
 import {
   MediaFilterActionTypes,
   MediaFilterState,
 } from '../../types/interfaces/MediaFiltersReducer'
+import MediaTitleSearchInput from '../FilterControls/MediaTitleSearchInput'
+import MediaTypeRadioGroup from '../FilterControls/MediaTypeRadioGroup'
 
 const genreOptions = ['action', 'adventure', 'comedy']
 const yearsOptions = ['1981', '1987']
@@ -79,14 +80,14 @@ const FilterBar: React.FC<FilterBarProps> = ({ dispatch, state }) => {
               label="years"
             />
           </Stack>
-          <MediaRadioGroup
+          <MediaTypeRadioGroup
             value={!type ? 'all' : type}
             onChange={handleTypeChange}
           />
         </div>
         <div>
           <Stack spacing={6} alignItems="flex-end">
-            <SearchInput
+            <MediaTitleSearchInput
               defaultValue={searchText}
               onChange={handleSearchTextChange}
             />

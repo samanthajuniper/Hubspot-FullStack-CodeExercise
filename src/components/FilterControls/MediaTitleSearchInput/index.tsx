@@ -1,14 +1,14 @@
 import React from 'react'
 import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
-import useDebounce from '../../hooks/useDebounce'
+import useDebounce from '../../../hooks/useDebounce'
 
-interface SearchInputProps {
+interface MediaTitleSearchInputProps {
   defaultValue?: string
   onChange: (searchTerm: string) => void
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({
+const MediaTitleSearchInput: React.FC<MediaTitleSearchInputProps> = ({
   defaultValue,
   onChange,
 }) => {
@@ -36,4 +36,4 @@ const SearchInput: React.FC<SearchInputProps> = ({
   )
 }
 
-export default React.memo(SearchInput)
+export default React.memo(MediaTitleSearchInput)
