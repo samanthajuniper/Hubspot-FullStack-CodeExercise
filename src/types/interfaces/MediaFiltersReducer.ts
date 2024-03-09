@@ -7,11 +7,17 @@ export interface MediaFilterState {
   offset?: number
 }
 
-export type MediaFilterAction =
-  | { type: 'SET_YEARS'; payload: string[] }
-  | { type: 'SET_GENRES'; payload: string[] }
-  | { type: 'SET_SEARCH_TEXT'; payload: string }
-  | { type: 'SET_TYPE'; payload: string }
-  | { type: 'SET_LIMIT'; payload: number }
-  | { type: 'SET_OFFSET'; payload: number }
-  | { type: 'CLEAR_FILTERS' }
+export enum MediaFilterActionTypes {
+  SET_GENRES = 'SET_GENRES',
+  SET_YEARS = 'SET_YEARS',
+  SET_SEARCH_TEXT = 'SET_SEARCH_TEXT',
+  SET_TYPE = 'SET_TYPE',
+  CLEAR_FILTERS = 'CLEAR_FILTERS',
+}
+
+export type MediaFilterDispatchParams =
+  | { type: MediaFilterActionTypes.SET_YEARS; payload: string[] }
+  | { type: MediaFilterActionTypes.SET_GENRES; payload: string[] }
+  | { type: MediaFilterActionTypes.SET_SEARCH_TEXT; payload: string }
+  | { type: MediaFilterActionTypes.SET_TYPE; payload: string }
+  | { type: MediaFilterActionTypes.CLEAR_FILTERS }

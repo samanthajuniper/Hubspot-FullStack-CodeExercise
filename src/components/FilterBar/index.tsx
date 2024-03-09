@@ -5,7 +5,7 @@ import SearchInput from '../SearchInput'
 import MediaRadioGroup from '../RadioGroup'
 import { Button } from '@mui/material'
 import {
-  MediaFilterAction,
+  MediaFilterActionTypes,
   MediaFilterState,
 } from '../../types/interfaces/MediaFiltersReducer'
 
@@ -13,34 +13,53 @@ const genreOptions = ['action', 'adventure', 'comedy']
 const yearsOptions = ['1981', '1987']
 
 interface FilterBarProps {
-  dispatch: React.Dispatch<MediaFilterAction>
+  dispatch: ({ type, payload }: { type: any; payload?: any }) => void
   state: MediaFilterState
 }
 
 const FilterBar: React.FC<FilterBarProps> = ({ dispatch, state }) => {
   const { genres, years, searchText, type } = state
 
-  const handleGenresChange = useCallback((selectedOptions: string[]) => {
-    dispatch({ type: 'SET_GENRES', payload: selectedOptions })
-  }, [])
+  const createFilterHandler = <K extends keyof MediaFilterState, T>(
+    type: MediaFilterActionTypes,
+    key?: K,
+    transformPayload?: (key: string) => T | null,
+  ) => {
+    return useCallback(
+      (value: any) => {
+        const payloadValue = transformPayload ? transformPayload(value) : value
+        dispatch({
+          type,
+          payload: payloadValue && key ? { [key]: payloadValue } : {},
+        })
+      },
+      [dispatch, type, key, transformPayload],
+    )
+  }
+  const handleYearsChange = createFilterHandler(
+    MediaFilterActionTypes.SET_YEARS,
+    'years',
+  )
 
-  const handleYearsChange = useCallback((selectedOptions: string[]) => {
-    dispatch({ type: 'SET_YEARS', payload: selectedOptions })
-  }, [])
+  const handleGenresChange = createFilterHandler(
+    MediaFilterActionTypes.SET_GENRES,
+    'genres',
+  )
 
-  const handleSearchTextChange = useCallback((searchTerm: string) => {
-    dispatch({ type: 'SET_SEARCH_TEXT', payload: searchTerm })
-  }, [])
+  const handleSearchTextChange = createFilterHandler(
+    MediaFilterActionTypes.SET_SEARCH_TEXT,
+    'searchText',
+  )
 
-  const handleTypeChange = useCallback((type: string) => {
-    // TODO:
-    // @ts-ignore
-    dispatch({ type: 'SET_TYPE', payload: type === 'all' ? null : type })
-  }, [])
+  const handleTypeChange = createFilterHandler(
+    MediaFilterActionTypes.SET_TYPE,
+    'type',
+    (selectedType: string) => (selectedType === 'all' ? null : selectedType),
+  )
 
-  const handleClearFilters = useCallback(() => {
-    dispatch({ type: 'CLEAR_FILTERS' })
-  }, [])
+  const handleClearFilters = createFilterHandler(
+    MediaFilterActionTypes.CLEAR_FILTERS,
+  )
 
   return (
     <>

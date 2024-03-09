@@ -48,13 +48,13 @@ function getData(years, genres, searchText, type, limit, offset) {
         builder.andWhere('type', type);
       }
 
-      if (limit) {
-        builder.limit(limit);
-      }
+      // if (limit) {
+      //   builder.limit(limit);
+      // }
 
-      if (offset) {
-        builder.offset(offset);
-      }
+      // if (offset) {
+      //   builder.offset(offset);
+      // }
     })
     .select('*');
 }
