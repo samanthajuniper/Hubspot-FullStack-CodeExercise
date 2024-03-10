@@ -9,7 +9,7 @@ import fetchMedia from './utils/data-fetching/fetchMedia'
 import fetchMediaMetadata from './utils/data-fetching/fetchMediaMetadata'
 import FilterBar from '../../components/FilterBar'
 import MediaCard from '../../components/MediaCard'
-import MediaPagination from '../../components/Pagination'
+import MediaPagination from '../../components/MediaPagination'
 import NoResultsMessage from '../../components/NoResultsMessage'
 import scrollToTop from './utils/scrollToTop'
 

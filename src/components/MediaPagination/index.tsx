@@ -1,7 +1,7 @@
 import * as React from 'react'
 import TablePagination from '@mui/material/TablePagination'
 
-interface MediaPaginationProps {
+export interface MediaPaginationProps {
   handlePageChange: (pageNumber: number) => void
   handleChangeItemsPerPage: (limit: string) => void
   page: number
