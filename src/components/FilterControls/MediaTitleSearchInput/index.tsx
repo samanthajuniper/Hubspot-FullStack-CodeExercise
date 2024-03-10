@@ -17,7 +17,7 @@ const MediaTitleSearchInput = forwardRef(
     }, 400)
 
     return (
-      <FormControl sx={{ m: 1, width: 300 }}>
+      <FormControl sx={{ m: 1, width: 300, margin: '8px !important' }}>
         <TextField
           inputRef={ref}
           label="Title Search"

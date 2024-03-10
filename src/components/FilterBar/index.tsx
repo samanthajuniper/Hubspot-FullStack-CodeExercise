@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react'
 import Stack from '@mui/material/Stack'
 import MultiSelectCheckmarks from '../FilterControls/MultiSelect'
 
-import { Button } from '@mui/material'
+import { Button, useMediaQuery, useTheme } from '@mui/material'
 import { MediaFilterState } from '../../types/interfaces/MediaFiltersReducer'
 import MediaTitleSearchInput from '../FilterControls/MediaTitleSearchInput'
 import MediaTypeRadioGroup from '../FilterControls/MediaTypeRadioGroup'
@@ -22,6 +22,8 @@ const FilterBar: React.FC<FilterBarProps> = ({
   genreOptions,
   yearOptions,
 }) => {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const { genres, years, type } = state
   const searchInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -57,9 +59,16 @@ const FilterBar: React.FC<FilterBarProps> = ({
   }, [])
 
   return (
-    <Stack direction="row" justifyContent="space-between" spacing={2}>
-      <div>
-        <Stack direction="row" spacing={2}>
+    <Stack
+      direction="column"
+      justifyContent={isMobile ? 'center' : 'space-between'}
+      alignItems={isMobile ? 'center' : 'unset'}
+    >
+      <Stack
+        direction={isMobile ? 'column' : 'row'}
+        justifyContent="space-between"
+      >
+        <Stack direction={isMobile ? 'column' : 'row'}>
           <MultiSelectCheckmarks
             options={genreOptions}
             defaultValue={genres || []}
@@ -73,18 +82,32 @@ const FilterBar: React.FC<FilterBarProps> = ({
             label="years"
           />
         </Stack>
-        <MediaTypeRadioGroup
-          value={!type ? 'all' : type}
-          onChange={handleTypeChange}
-        />
-      </div>
-
-      <Stack spacing={6} alignItems="flex-end">
         <MediaTitleSearchInput
           onChange={handleSearchTextChange}
           ref={searchInputRef}
         />
-        <Button variant="outlined" onClick={handleClearFilters}>
+      </Stack>
+
+      <Stack
+        component="div"
+        direction={isMobile ? 'column' : 'row'}
+        justifyContent={isMobile ? 'unset' : 'space-between'}
+        sx={{ padding: '0 7px', width: isMobile ? '300px' : 'unset' }}
+      >
+        <MediaTypeRadioGroup
+          value={!type ? 'all' : type}
+          onChange={handleTypeChange}
+        />
+        <Button
+          variant="outlined"
+          onClick={handleClearFilters}
+          sx={{
+            height: '40px',
+            marginTop: isMobile ? '15px' : '8px',
+            marginBottom: '4px',
+            width: '200px',
+          }}
+        >
           Clear All Filters
         </Button>
       </Stack>

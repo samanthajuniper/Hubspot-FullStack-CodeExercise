@@ -169,22 +169,21 @@ const MediaView = () => {
       )}
       <Box
         ref={mediaContainerRef}
-        sx={{ width: 'fit-content', height: '780px', overflow: 'scroll' }}
+        sx={{
+          width: 'fit-content',
+          height: 'calc(100vh - 320px)',
+          overflow: 'scroll',
+        }}
       >
         <Grid
           container
           spacing={3}
           display="flex"
-          justifyContent="space-around"
+          justifyContent="center"
           sx={{ marginTop: '5px' }}
         >
           {mediaData?.map(item => (
-            <Grid
-              xs={4}
-              key={item.id}
-              width="fit-content"
-              justifyContent="space-around"
-            >
+            <Grid xs={4} key={item.id} width="fit-content">
               <MediaCard
                 title={item.title}
                 year={item.year}

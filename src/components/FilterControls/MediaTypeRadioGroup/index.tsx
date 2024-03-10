@@ -15,7 +15,7 @@ const MediaTypeRadioGroup: React.FC<MediaMediaTypeRadioGroupProps> = ({
   onChange,
 }) => {
   return (
-    <FormControl sx={{ m: 2 }}>
+    <FormControl sx={{ margin: '8px', width: '300px' }}>
       <FormLabel id="media-type-group">Media Type</FormLabel>
       <RadioGroup
         row
