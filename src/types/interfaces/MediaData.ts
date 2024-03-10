@@ -20,3 +20,10 @@ export interface FetchMediaResponse {
     paginationInfo: PaginationInfo | null
   } | null
 }
+export interface FetchMediaMetadataResponse {
+  error: string | null
+  data: {
+    genres: string[] | null
+    years: string[] | null
+  } | null
+}

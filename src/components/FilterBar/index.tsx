@@ -3,26 +3,24 @@ import Stack from '@mui/material/Stack'
 import MultiSelectCheckmarks from '../FilterControls/MultiSelect'
 
 import { Button } from '@mui/material'
-import {
-  MediaFilterActionTypes,
-  MediaFilterState,
-} from '../../types/interfaces/MediaFiltersReducer'
+import { MediaFilterState } from '../../types/interfaces/MediaFiltersReducer'
 import MediaTitleSearchInput from '../FilterControls/MediaTitleSearchInput'
 import MediaTypeRadioGroup from '../FilterControls/MediaTypeRadioGroup'
-
-const genreOptions = ['action', 'adventure', 'comedy']
-const yearsOptions = ['1981', '1987']
 
 interface FilterBarProps {
   dispatch: ({ type, payload }: { type: any; payload?: any }) => void
   state: MediaFilterState
   goToFirstPage: () => void
+  genreOptions: string[] | []
+  yearOptions: string[] | []
 }
 
 const FilterBar: React.FC<FilterBarProps> = ({
   dispatch,
   state,
   goToFirstPage,
+  genreOptions,
+  yearOptions,
 }) => {
   const { genres, years, type } = state
   const searchInputRef = useRef<HTMLInputElement | null>(null)
@@ -69,7 +67,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
             label="genres"
           />
           <MultiSelectCheckmarks
-            options={yearsOptions}
+            options={yearOptions}
             defaultOptions={years || []}
             onClose={handleYearsChange}
             label="years"

@@ -1,4 +1,4 @@
-import { FetchMediaResponse } from '../../../../types/interfaces/MediaData'
+import { FetchMediaResponse } from '../../../../../types/interfaces/MediaData'
 
 interface FetchMediaProps {
   years?: string[]

@@ -1,18 +1,20 @@
-import React, {
-  useState,
-  useEffect,
-  useReducer,
-  useCallback,
-  useRef,
-} from 'react'
+import { useState, useEffect, useReducer, useCallback, useRef } from 'react'
+import Backdrop from '@mui/material/Backdrop'
+import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
+import Grid from '@mui/material/Unstable_Grid2'
+import Stack from '@mui/material/Stack'
+
+import fetchMedia from './utils/data-fetching/fetchMedia'
+import fetchMediaMetadata from './utils/data-fetching/fetchMediaMetadata'
 import FilterBar from '../../components/FilterBar'
 import MediaCard from '../../components/MediaCard'
-import Grid from '@mui/material/Unstable_Grid2'
-import Box from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
+import MediaPagination from '../../components/Pagination'
 import NoResultsMessage from '../../components/NoResultsMessage'
-import fetchMedia from './utils/fetchMedia'
+import scrollToTop from './utils/scrollToTop'
+
 import {
+  FetchMediaMetadataResponse,
   FetchMediaResponse,
   MediaItem,
   PaginationInfo,
@@ -22,9 +24,6 @@ import {
   MediaFilterDispatchParams,
   MediaFilterState,
 } from '../../types/interfaces/MediaFiltersReducer'
-import Backdrop from '@mui/material/Backdrop'
-import CircularProgress from '@mui/material/CircularProgress'
-import MediaPagination from '../../components/Pagination'
 
 const initialMediaFilterState: MediaFilterState = {
   years: [],
@@ -54,12 +53,6 @@ const mediaFiltersReducer = (
   }
 }
 
-const handleScrollToTop = (ref: React.RefObject<HTMLElement> | null) => {
-  if (ref && ref.current) {
-    ref.current.scrollTop = 0
-  }
-}
-
 const MediaView = () => {
   const [state, dispatch] = useReducer(
     mediaFiltersReducer,
@@ -69,7 +62,32 @@ const MediaView = () => {
   const [error, setError] = useState<string | null>()
   const [mediaData, setMediaData] = useState<MediaItem[] | null>(null)
   const [pagination, setPagination] = useState<PaginationInfo | null>(null)
+  const [genreOptions, setGenreOptions] = useState<string[] | []>([])
+  const [yearOptions, setYearOptions] = useState<string[] | []>([])
   const mediaContainerRef = useRef<HTMLElement | null>(null)
+
+  useEffect(() => {
+    let ignore = false
+    const handleFetchMediaMetaData = async () => {
+      setLoading(true)
+      setError(null)
+      const { error, data }: FetchMediaMetadataResponse =
+        await fetchMediaMetadata()
+      if (ignore) {
+        return
+      } else if (error || !data) {
+        setError(error)
+      } else {
+        setGenreOptions(data.genres ?? [])
+        setYearOptions(data.years ?? [])
+      }
+      setLoading(false)
+    }
+    handleFetchMediaMetaData()
+    return () => {
+      ignore = true
+    }
+  }, [])
 
   useEffect(() => {
     let ignore = false
@@ -99,7 +117,7 @@ const MediaView = () => {
   }, [state])
 
   const handlePageChange = useCallback((pageNumber: number) => {
-    handleScrollToTop(mediaContainerRef)
+    scrollToTop(mediaContainerRef)
     dispatch({
       type: MediaFilterActionTypes.SET_CURRENT_PAGE,
       payload: { currentPage: pageNumber },
@@ -107,7 +125,7 @@ const MediaView = () => {
   }, [])
 
   const handleChangeItemsPerPage = useCallback((limit: string) => {
-    handleScrollToTop(mediaContainerRef)
+    scrollToTop(mediaContainerRef)
     dispatch({
       type: MediaFilterActionTypes.SET_LIMIT,
       payload: { limit: parseInt(limit) },
@@ -117,7 +135,7 @@ const MediaView = () => {
   // use when a new filter is applied
   // example: user is on page 3 of results > new filter added > now only 2 pages of results
   const goToFirstPage = useCallback(() => {
-    handleScrollToTop(mediaContainerRef)
+    scrollToTop(mediaContainerRef)
     dispatch({
       type: MediaFilterActionTypes.SET_CURRENT_PAGE,
       payload: { currentPage: 1 },
@@ -138,6 +156,8 @@ const MediaView = () => {
         dispatch={dispatch}
         state={state}
         goToFirstPage={goToFirstPage}
+        genreOptions={genreOptions}
+        yearOptions={yearOptions}
       />
       {!mediaData?.length && !error && (
         <NoResultsMessage message="No items matched your search." />
