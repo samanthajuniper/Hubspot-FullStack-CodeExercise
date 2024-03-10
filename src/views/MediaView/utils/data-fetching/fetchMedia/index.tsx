@@ -1,6 +1,7 @@
 import { FetchMediaResponse } from '../../../../../types/interfaces/MediaData'
+import buildFetchMediaEndpoint from './buildFetchMediaEndpoint'
 
-interface FetchMediaProps {
+export interface FetchMediaProps {
   years?: string[]
   genres?: string[]
   searchText?: string
@@ -12,18 +13,7 @@ interface FetchMediaProps {
 const fetchMedia = async (
   props: FetchMediaProps = {},
 ): Promise<FetchMediaResponse> => {
-  const { years, genres, searchText, type, limit, currentPage } = props
-
-  const queryParams = new URLSearchParams({
-    ...(years?.length && { years: years.join(',') }),
-    ...(genres?.length && { genres: genres.join(',') }),
-    ...(searchText && { searchText }),
-    ...(type && { type }),
-    ...(currentPage && { currentPage }),
-    ...(limit && { limit }),
-  } as Record<string, string>)
-
-  const getMediaEndpoint = `${process.env.REACT_APP_API_BASE_URL}?${queryParams}`
+  const getMediaEndpoint = buildFetchMediaEndpoint(props)
 
   try {
     const response = await fetch(getMediaEndpoint, { method: 'GET' })

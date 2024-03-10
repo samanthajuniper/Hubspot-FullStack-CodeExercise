@@ -1,7 +1,4 @@
-import {
-  FetchMediaMetadataResponse,
-  FetchMediaResponse,
-} from '../../../../../types/interfaces/MediaData'
+import { FetchMediaMetadataResponse } from '../../../../../types/interfaces/MediaData'
 
 const fetchMediaMetadata = async (): Promise<FetchMediaMetadataResponse> => {
   const mediaMetadataEndpoint = `${process.env.REACT_APP_API_BASE_URL}metadata`

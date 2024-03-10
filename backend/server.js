@@ -7,5 +7,5 @@ const port = process.env.SERVER_PORT || 3001 ;
 app.use('/', mediaRouter);
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`App listening at http://localhost:${port}`);
 });
