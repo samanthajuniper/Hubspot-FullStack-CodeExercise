@@ -23,6 +23,10 @@ const MultiSelectCheckmarks: React.FC<MultiSelectProps> = ({
   const [internalSelectedOptions, setInternalSelectedOptions] =
     useState<string[]>(defaultValue)
 
+  useEffect(() => {
+    setInternalSelectedOptions(defaultValue)
+  }, [defaultValue])
+
   const handleChange = (
     event: SelectChangeEvent<typeof internalSelectedOptions>,
   ) => {
