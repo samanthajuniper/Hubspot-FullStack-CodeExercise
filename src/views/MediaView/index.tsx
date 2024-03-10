@@ -139,7 +139,7 @@ const MediaView = () => {
         state={state}
         goToFirstPage={goToFirstPage}
       />
-      {!mediaData?.length && (
+      {!mediaData?.length && !error && (
         <NoResultsMessage message="No items matched your search." />
       )}
       {error && (

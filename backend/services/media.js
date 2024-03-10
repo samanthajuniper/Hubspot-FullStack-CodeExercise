@@ -52,7 +52,7 @@ export function getTotalRecordsCount(years, genres, searchText, type) {
 }
 
 // Function to get data with pagination
-export function getData(years, genres, searchText, type, limit, currentPage) {
+export function getMediaData(years, genres, searchText, type, limit, currentPage) {
   const data = knexInstance('Media')
     .modify((builder) => {
       applyFilters(builder, years, genres, searchText, type);
@@ -66,7 +66,7 @@ export function getData(years, genres, searchText, type, limit, currentPage) {
         builder.offset(offset);
       }
 
-     // builder.orderBy('title', 'asc');
+     builder.orderBy('title', 'asc');
 
     })
     .select('*');

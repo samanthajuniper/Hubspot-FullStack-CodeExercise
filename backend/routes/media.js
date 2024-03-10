@@ -1,24 +1,31 @@
 import { Router } from 'express';
-import {getData, getTotalRecordsCount, getMediaMetaData} from '../services/media.js';
+import cors from 'cors';
+import { getMediaData, getTotalRecordsCount, getMediaMetaData } from '../services/media.js';
 
 const router = Router();
+
+router.use(cors({ origin: 'http://localhost:1234' }));
 
 // TODO:
 // security: sanitization & validation of query params
 router.get('/', async function(req, res) {
   try {
-    const years = req.query.years ? req.query.years.split(',') : [];
-    const genres = req.query.genres ? req.query.genres.split(',') : [];
-    const searchText = req.query.searchText || '';
-    const type = req.query.type || '';
-    const limit = req.query.limit || 9;
-    const currentPage = req.query.currentPage || 1;
-   
+    const {
+      years: rawYears = '',
+      genres: rawGenres = '',
+      searchText = '',
+      type = '',
+      limit = 9,
+      currentPage = 1,
+    } = req.query;
+
+    const years = rawYears ? rawYears.split(',') : [];
+    const genres = rawGenres ? rawGenres.split(',') : [];
 
     const totalRecordsResult = await getTotalRecordsCount(years, genres, searchText, type);
     const totalRecords = totalRecordsResult[0]['count(*)'];
   
-    const data = await getData(years, genres, searchText, type, limit, currentPage);
+    const data = await getMediaData(years, genres, searchText, type, limit, currentPage);
 
     // Calculate pagination information
     const totalPages = Math.ceil(totalRecords / limit);
@@ -28,11 +35,6 @@ router.get('/', async function(req, res) {
       currentPage: parseInt(currentPage),
       pageSize: parseInt(limit),
     };
-
-    // Set CORS headers
-    res.header('Access-Control-Allow-Origin', 'http://localhost:1234');
-    res.header('Access-Control-Allow-Methods', 'GET');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
 
     // Send response with status 200, JSON data, and pagination information
     res.status(200).json({ media: data, paginationInfo });
@@ -55,12 +57,6 @@ router.get('/metadata', async function (req, res) {
     })
 
     const distinctGenres = Array.from(genresSet).sort();
-
-    
-    // Set CORS headers
-    res.header('Access-Control-Allow-Origin', 'http://localhost:1234');
-    res.header('Access-Control-Allow-Methods', 'GET');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');  
 
     // Send response with status 200 and JSON metadata
     res.status(200).json({genres: distinctGenres, years});
