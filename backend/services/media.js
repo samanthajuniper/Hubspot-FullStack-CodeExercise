@@ -65,10 +65,26 @@ export function getData(years, genres, searchText, type, limit, currentPage) {
         const offset = (currentPage - 1) * limit
         builder.offset(offset);
       }
+
+     // builder.orderBy('title', 'asc');
+
     })
     .select('*');
 
   return data;
 }
 
-// sqlite> SELECT (SELECT COUNT(*) FROM Media WHERE year = '1981') as total, m.* from Media m where genre like '%action%' order by title limit 1 offset 1;
+// Function to get all genres and years
+export async function getMediaMetaData() {
+  try {
+    const genres = await knexInstance('Media').select('genre')
+    const distinctYears = await knexInstance('Media').distinct('year').orderBy('year', 'asc');;
+
+    return {
+      genres: genres,
+      years: distinctYears.map((row) => row.year),
+    };
+  } catch (error) {
+    throw new Error(`Error fetching media metadata: ${error.message}`);
+  }
+}
