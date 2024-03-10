@@ -57,6 +57,13 @@ const MultiSelectCheckmarks: React.FC<MultiSelectProps> = ({
           onClose={handleClose}
           input={<OutlinedInput label={label} />}
           renderValue={selected => (selected as string[]).join(', ')}
+          MenuProps={{
+            PaperProps: {
+              style: {
+                maxHeight: 200,
+              },
+            },
+          }}
         >
           {options.map(option => (
             <MenuItem key={option} value={option}>

@@ -170,9 +170,9 @@ const MediaView = () => {
       <Box
         ref={mediaContainerRef}
         sx={{
-          width: 'fit-content',
           height: 'calc(100vh - 320px)',
-          overflow: 'scroll',
+          overflowY: 'scroll',
+          overflowX: 'hidden',
         }}
       >
         <Grid
