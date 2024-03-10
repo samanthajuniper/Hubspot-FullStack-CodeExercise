@@ -62,13 +62,13 @@ const FilterBar: React.FC<FilterBarProps> = ({
         <Stack direction="row" spacing={2}>
           <MultiSelectCheckmarks
             options={genreOptions}
-            defaultOptions={genres || []}
+            defaultValue={genres || []}
             onClose={handleGenresChange}
             label="genres"
           />
           <MultiSelectCheckmarks
             options={yearOptions}
-            defaultOptions={years || []}
+            defaultValue={years || []}
             onClose={handleYearsChange}
             label="years"
           />

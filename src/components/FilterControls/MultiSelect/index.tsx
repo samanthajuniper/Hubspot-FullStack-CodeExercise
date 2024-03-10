@@ -9,23 +9,19 @@ import ListItemText from '@mui/material/ListItemText'
 
 interface MultiSelectProps {
   options: string[]
-  defaultOptions: string[]
+  defaultValue: string[]
   onClose: (selectedOptions: string[]) => void
   label: string
 }
 
 const MultiSelectCheckmarks: React.FC<MultiSelectProps> = ({
   options,
-  defaultOptions,
+  defaultValue,
   onClose,
   label,
 }) => {
   const [internalSelectedOptions, setInternalSelectedOptions] =
-    useState<string[]>(defaultOptions)
-
-  useEffect(() => {
-    setInternalSelectedOptions(defaultOptions)
-  }, [defaultOptions])
+    useState<string[]>(defaultValue)
 
   const handleChange = (
     event: SelectChangeEvent<typeof internalSelectedOptions>,
@@ -52,7 +48,7 @@ const MultiSelectCheckmarks: React.FC<MultiSelectProps> = ({
           id={`multi-select-checkbox-${label}`}
           multiple
           value={internalSelectedOptions}
-          defaultValue={defaultOptions}
+          defaultValue={defaultValue}
           onChange={handleChange}
           onClose={handleClose}
           input={<OutlinedInput label={label} />}
