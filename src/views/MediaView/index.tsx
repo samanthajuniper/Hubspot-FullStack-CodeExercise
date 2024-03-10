@@ -46,7 +46,6 @@ const mediaFiltersReducer = (
     case 'SET_LIMIT':
       return { ...state, ...action.payload }
     case 'CLEAR_FILTERS':
-      console.log('clearing')
       return {
         ...initialMediaFilterState,
       }
@@ -85,8 +84,8 @@ const MediaView = () => {
       } else if (error || !data) {
         setError(error)
       } else {
-        setMediaData(data?.media)
-        setPagination(data?.paginationInfo)
+        setMediaData(data.media)
+        setPagination(data.paginationInfo)
       }
 
       setLoading(false)
@@ -107,11 +106,21 @@ const MediaView = () => {
     })
   }, [])
 
-  const handleChangeRowsPerPage = useCallback((limit: string) => {
+  const handleChangeItemsPerPage = useCallback((limit: string) => {
     handleScrollToTop(mediaContainerRef)
     dispatch({
       type: MediaFilterActionTypes.SET_LIMIT,
       payload: { limit: parseInt(limit) },
+    })
+  }, [])
+
+  // use when a new filter is applied
+  // example: user is on page 3 of results > new filter added > now only 2 pages of results
+  const goToFirstPage = useCallback(() => {
+    handleScrollToTop(mediaContainerRef)
+    dispatch({
+      type: MediaFilterActionTypes.SET_CURRENT_PAGE,
+      payload: { currentPage: 1 },
     })
   }, [])
 
@@ -125,7 +134,11 @@ const MediaView = () => {
           <CircularProgress color="inherit" />
         </Backdrop>
       )}
-      <FilterBar dispatch={dispatch} state={state} />
+      <FilterBar
+        dispatch={dispatch}
+        state={state}
+        goToFirstPage={goToFirstPage}
+      />
       {!mediaData?.length && (
         <NoResultsMessage message="No items matched your search." />
       )}
@@ -135,7 +148,6 @@ const MediaView = () => {
         />
       )}
       <Box
-        // sx={{ width: 'fit-content' }}
         ref={mediaContainerRef}
         sx={{ width: 'fit-content', height: '780px', overflow: 'scroll' }}
       >
@@ -167,7 +179,7 @@ const MediaView = () => {
       {pagination && (
         <MediaPagination
           handlePageChange={handlePageChange}
-          handleChangeRowsPerPage={handleChangeRowsPerPage}
+          handleChangeItemsPerPage={handleChangeItemsPerPage}
           page={pagination.currentPage}
           totalPages={pagination.totalPages}
           totalRecords={pagination.totalRecords}

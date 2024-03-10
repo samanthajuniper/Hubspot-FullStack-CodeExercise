@@ -12,7 +12,6 @@ router.get('/', async function(req, res) {
     const searchText = req.query.searchText || '';
     const type = req.query.type || '';
     const limit = req.query.limit || 9;
-    console.log("🚀 ~ router.get ~ limit:", limit)
     const currentPage = req.query.currentPage || 1;
     // Call function to get total records count
    const totalRecordsResult = await getTotalRecordsCount(years, genres, searchText, type);
@@ -27,8 +26,8 @@ router.get('/', async function(req, res) {
     const paginationInfo = {
       totalRecords,
       totalPages,
-      currentPage,
-      pageSize: limit,
+      currentPage: parseInt(currentPage),
+      pageSize: parseInt(limit),
     };
 
     // Set CORS headers

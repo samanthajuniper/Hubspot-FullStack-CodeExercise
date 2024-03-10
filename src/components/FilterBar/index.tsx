@@ -16,31 +16,38 @@ const yearsOptions = ['1981', '1987']
 interface FilterBarProps {
   dispatch: ({ type, payload }: { type: any; payload?: any }) => void
   state: MediaFilterState
+  goToFirstPage: () => void
 }
 
-const FilterBar: React.FC<FilterBarProps> = ({ dispatch, state }) => {
+const FilterBar: React.FC<FilterBarProps> = ({
+  dispatch,
+  state,
+  goToFirstPage,
+}) => {
   const { genres, years, type } = state
   const searchInputRef = useRef<HTMLInputElement | null>(null)
 
   const handleGenresChange = useCallback((selectedOptions: string[]) => {
     dispatch({ type: 'SET_GENRES', payload: { genres: selectedOptions } })
+    goToFirstPage()
   }, [])
 
   const handleYearsChange = useCallback((selectedOptions: string[]) => {
     dispatch({ type: 'SET_YEARS', payload: { years: selectedOptions } })
+    goToFirstPage()
   }, [])
 
   const handleSearchTextChange = useCallback((searchTerm: string) => {
     dispatch({ type: 'SET_SEARCH_TEXT', payload: { searchText: searchTerm } })
+    goToFirstPage()
   }, [])
 
   const handleTypeChange = useCallback((type: string) => {
-    // TODO:
-    // @ts-ignore
     dispatch({
       type: 'SET_TYPE',
       payload: { type: type === 'all' ? null : type },
     })
+    goToFirstPage()
   }, [])
 
   const handleClearFilters = useCallback(() => {

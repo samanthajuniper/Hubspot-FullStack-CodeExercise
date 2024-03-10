@@ -3,7 +3,7 @@ import TablePagination from '@mui/material/TablePagination'
 
 interface MediaPaginationProps {
   handlePageChange: (pageNumber: number) => void
-  handleChangeRowsPerPage: (limit: string) => void
+  handleChangeItemsPerPage: (limit: string) => void
   page: number
   totalPages: number
   totalRecords: number
@@ -12,28 +12,25 @@ interface MediaPaginationProps {
 
 const MediaPagination: React.FC<MediaPaginationProps> = ({
   handlePageChange,
-  handleChangeRowsPerPage,
+  handleChangeItemsPerPage,
   page,
   totalRecords,
   pageSize,
-}) => {
-  return (
-    <TablePagination
-      component="div"
-      count={totalRecords}
-      page={page - 1}
-      onPageChange={(e, page) => {
-        console.log(page)
-        handlePageChange(page)
-      }}
-      rowsPerPage={pageSize}
-      onRowsPerPageChange={e => {
-        console.log(e.target.value)
-        handleChangeRowsPerPage(e.target.value)
-      }}
-      rowsPerPageOptions={[6, 9, 12, 15]}
-    />
-  )
-}
+}) => (
+  <TablePagination
+    component="div"
+    count={totalRecords}
+    page={page - 1}
+    onPageChange={(e, page) => {
+      handlePageChange(page + 1)
+    }}
+    rowsPerPage={pageSize}
+    onRowsPerPageChange={e => {
+      handleChangeItemsPerPage(e.target.value)
+    }}
+    rowsPerPageOptions={[6, 9, 12, 15]}
+    labelRowsPerPage="Items per page:"
+  />
+)
 
-export default MediaPagination
+export default React.memo(MediaPagination)
