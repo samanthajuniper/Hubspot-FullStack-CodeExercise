@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useReducer, useCallback } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useCallback,
+  useRef,
+} from 'react'
 import FilterBar from '../../components/FilterBar'
 import MediaCard from '../../components/MediaCard'
 import Grid from '@mui/material/Unstable_Grid2'
@@ -6,13 +12,19 @@ import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import NoResultsMessage from '../../components/NoResultsMessage'
 import fetchMedia from './utils/fetchMedia'
-import { FetchMediaResponse, MediaItem } from '../../types/interfaces/MediaData'
 import {
+  FetchMediaResponse,
+  MediaItem,
+  PaginationInfo,
+} from '../../types/interfaces/MediaData'
+import {
+  MediaFilterActionTypes,
   MediaFilterDispatchParams,
   MediaFilterState,
 } from '../../types/interfaces/MediaFiltersReducer'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
+import MediaPagination from '../../components/Pagination'
 
 const initialMediaFilterState: MediaFilterState = {
   years: [],
@@ -30,6 +42,8 @@ const mediaFiltersReducer = (
     case 'SET_GENRES':
     case 'SET_SEARCH_TEXT':
     case 'SET_TYPE':
+    case 'SET_CURRENT_PAGE':
+    case 'SET_LIMIT':
       return { ...state, ...action.payload }
     case 'CLEAR_FILTERS':
       console.log('clearing')
@@ -41,6 +55,12 @@ const mediaFiltersReducer = (
   }
 }
 
+const handleScrollToTop = (ref: React.RefObject<HTMLElement> | null) => {
+  if (ref && ref.current) {
+    ref.current.scrollTop = 0
+  }
+}
+
 const MediaView = () => {
   const [state, dispatch] = useReducer(
     mediaFiltersReducer,
@@ -49,6 +69,8 @@ const MediaView = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>()
   const [mediaData, setMediaData] = useState<MediaItem[] | null>(null)
+  const [pagination, setPagination] = useState<PaginationInfo | null>(null)
+  const mediaContainerRef = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
     let ignore = false
@@ -56,15 +78,15 @@ const MediaView = () => {
     const handleFetchMediaData = async () => {
       setLoading(true)
       setError(null)
-
       const { error, data }: FetchMediaResponse = await fetchMedia(state)
 
       if (ignore) {
         return
-      } else if (error) {
+      } else if (error || !data) {
         setError(error)
       } else {
-        setMediaData(data)
+        setMediaData(data?.media)
+        setPagination(data?.paginationInfo)
       }
 
       setLoading(false)
@@ -77,18 +99,21 @@ const MediaView = () => {
     }
   }, [state])
 
-  const memoizedDispatch: ({
-    type,
-    payload,
-  }: {
-    type: any
-    payload?: any
-  }) => void = useCallback(
-    ({ type, payload }) => {
-      dispatch({ type, payload })
-    },
-    [dispatch],
-  )
+  const handlePageChange = useCallback((pageNumber: number) => {
+    handleScrollToTop(mediaContainerRef)
+    dispatch({
+      type: MediaFilterActionTypes.SET_CURRENT_PAGE,
+      payload: { currentPage: pageNumber },
+    })
+  }, [])
+
+  const handleChangeRowsPerPage = useCallback((limit: string) => {
+    handleScrollToTop(mediaContainerRef)
+    dispatch({
+      type: MediaFilterActionTypes.SET_LIMIT,
+      payload: { limit: parseInt(limit) },
+    })
+  }, [])
 
   return (
     <Stack data-testid="media-view" flexDirection="column">
@@ -100,7 +125,7 @@ const MediaView = () => {
           <CircularProgress color="inherit" />
         </Backdrop>
       )}
-      <FilterBar dispatch={memoizedDispatch} state={state} />
+      <FilterBar dispatch={dispatch} state={state} />
       {!mediaData?.length && (
         <NoResultsMessage message="No items matched your search." />
       )}
@@ -109,12 +134,17 @@ const MediaView = () => {
           message={`Error: ${error} Please refresh to try again.`}
         />
       )}
-      <Box sx={{ width: 'fit-content' }}>
+      <Box
+        // sx={{ width: 'fit-content' }}
+        ref={mediaContainerRef}
+        sx={{ width: 'fit-content', height: '780px', overflow: 'scroll' }}
+      >
         <Grid
           container
           spacing={3}
           display="flex"
           justifyContent="space-around"
+          sx={{ marginTop: '5px' }}
         >
           {mediaData?.map(item => (
             <Grid
@@ -134,6 +164,16 @@ const MediaView = () => {
           ))}
         </Grid>
       </Box>
+      {pagination && (
+        <MediaPagination
+          handlePageChange={handlePageChange}
+          handleChangeRowsPerPage={handleChangeRowsPerPage}
+          page={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          totalRecords={pagination.totalRecords}
+          pageSize={pagination.pageSize}
+        />
+      )}
     </Stack>
   )
 }

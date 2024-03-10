@@ -6,19 +6,21 @@ interface FetchMediaProps {
   searchText?: string
   type?: string
   limit?: number
-  offset?: number
+  currentPage?: number
 }
 
 const fetchMedia = async (
   props: FetchMediaProps = {},
 ): Promise<FetchMediaResponse> => {
-  const { years, genres, searchText, type, limit, offset } = props
+  const { years, genres, searchText, type, limit, currentPage } = props
 
   const queryParams = new URLSearchParams({
     ...(years?.length && { years: years.join(',') }),
     ...(genres?.length && { genres: genres.join(',') }),
     ...(searchText && { searchText }),
     ...(type && { type }),
+    ...(currentPage && { currentPage }),
+    ...(limit && { limit }),
   } as Record<string, string>)
 
   const getMediaEndpoint = `${process.env.REACT_APP_API_BASE_URL}?${queryParams}`

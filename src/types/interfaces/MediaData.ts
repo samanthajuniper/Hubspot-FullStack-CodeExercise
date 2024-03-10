@@ -6,17 +6,17 @@ export interface MediaItem {
   type: string
   poster: string
 }
-
-/* TODO: add pagination in when API is fixed */
-// export interface PaginationData {
-//   totalRecords: number
-//   totalPages: number
-//   currentPage: number
-//   pageSize: number
-// }
+export interface PaginationInfo {
+  totalRecords: number
+  totalPages: number
+  currentPage: number
+  pageSize: number
+}
 
 export interface FetchMediaResponse {
   error: string | null
-  data: MediaItem[] | null
-  //   pagination: PaginationData | null
+  data: {
+    media: MediaItem[] | null
+    paginationInfo: PaginationInfo | null
+  } | null
 }
