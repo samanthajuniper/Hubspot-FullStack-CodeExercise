@@ -28,7 +28,7 @@ const MediaPagination: React.FC<MediaPaginationProps> = ({
     onRowsPerPageChange={e => {
       handleChangeItemsPerPage(e.target.value)
     }}
-    rowsPerPageOptions={[6, 9, 12, 15]}
+    rowsPerPageOptions={[4, 8, 12, 16]}
     labelRowsPerPage="Items per page:"
   />
 )

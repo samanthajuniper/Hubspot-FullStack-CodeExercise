@@ -15,7 +15,7 @@ router.get('/', async function(req, res) {
       genres: rawGenres = '',
       searchText = '',
       type = '',
-      limit = 9,
+      limit = 8,
       currentPage = 1,
     } = req.query;
 
