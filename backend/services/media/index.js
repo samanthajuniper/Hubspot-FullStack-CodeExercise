@@ -1,10 +1,13 @@
 import knex from 'knex';
 import path from 'path';
 
+const database_path = process.env.DATABASE_FILE || 'database.db'
+
+
 const knexConfig = {
   client: 'better-sqlite3',
   connection: {
-    filename: path.resolve('database.db'),
+    filename: path.resolve(database_path),
     fileMustExist: true,
   },
   useNullAsDefault: true,
@@ -14,7 +17,7 @@ const knexConfig = {
 const knexInstance = knex(knexConfig);
 
 /// Shared builder function
-function applyFilters(builder, years, genres, searchText, type) {
+export function applyFilters(builder, years, genres, searchText, type) {
   if (years && years.length > 0) {
     builder.whereIn('year', years);
   }

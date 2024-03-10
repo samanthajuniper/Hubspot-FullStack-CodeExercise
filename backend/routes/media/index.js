@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import cors from 'cors';
-import { getMediaData, getTotalRecordsCount, getMediaMetaData } from '../services/media.js';
+import { getMediaData, getTotalRecordsCount, getMediaMetaData } from '../../services/media/index.js';
 
 const router = Router();
 

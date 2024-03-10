@@ -7,6 +7,7 @@
     "start": "parcel src/index.html",
     "serve": "node backend/server.js",
     "test:fe": "jest src --watch",
+    "test:be": "NODE_OPTIONS=--experimental-vm-modules DATABASE_FILE=test.db jest backend --watch",
     "dev": "nodemon backend/server.js",
     "db:setup": "sqlite3 database.db < create_database.sql",
     "db:hydrate": "node scripts/hydrate_db.js"
@@ -42,6 +43,13 @@
     "nodemon": "^3.0.2",
     "prettier": "^3.2.5",
     "process": "^0.11.10",
+    "supertest": "^6.3.4",
     "typescript": "^5.4.2"
+  },
+  "jest": {
+    "projects": [
+      "src/jest.config.js",
+      "backend/jest.config.js"
+    ]
   }
 }

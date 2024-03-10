@@ -1,12 +1,12 @@
 export default {
   "testEnvironment": "jsdom",
   "roots": [
-    "<rootDir>/src"
+    "<rootDir>"
   ],
   "transform": {
     "^.+\\.(ts|tsx)$": "ts-jest",
   },
  "setupFilesAfterEnv": [
-   "<rootDir>/src/setupTests.ts"
+   "<rootDir>/setupTests.ts"
 ],
 }
