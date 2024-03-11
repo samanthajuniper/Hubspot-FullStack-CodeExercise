@@ -39,7 +39,7 @@ describe("media routes", function () {
     });
   });
 
-  test('genres filter', async () => {
+  test('applies the genres filter', async () => {
     const res = await request(testApp).get('/?genres=sci-fi');
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.text)).toEqual({
@@ -62,7 +62,7 @@ describe("media routes", function () {
     });
   });
 
-  test('years filter', async () => {
+  test('applies the years filter', async () => {
     const res = await request(testApp).get('/?years=1987');
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.text)).toEqual({
@@ -85,7 +85,7 @@ describe("media routes", function () {
     });
   });
 
-  test('years and genres filters', async () => {
+  test('applies the years and genres filters together', async () => {
     const res = await request(testApp).get('/?years=1987&genres=adventure');
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.text)).toEqual({
@@ -107,7 +107,8 @@ describe("media routes", function () {
         },
     });
   });
-  test('search text', async () => {
+
+  test('applies the search text filter', async () => {
     const res = await request(testApp).get('/?searchText=pred');
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.text)).toEqual({

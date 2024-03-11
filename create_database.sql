@@ -1,6 +1,6 @@
 ATTACH DATABASE 'database.db' AS db;
 
-CREATE TABLE IF NOT EXISTS Media (
+CREATE TABLE IF NOT EXISTS db.Media (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT,
     year TEXT,
@@ -9,11 +9,11 @@ CREATE TABLE IF NOT EXISTS Media (
     type TEXT
 );
 
-Media (title, year, poster, genre, type)
+INSERT INTO db.Media (title, year, poster, genre, type)
 VALUES (
-    'Predator',
-    '1987',
-    'https://ia.media-imdb.com/images/M/MV5BMTI2ODMzODA0Ml5BMl5BanBnXkFtZTYwNTM3NzY5._V1._CR17,27,308,447_.jpg',
-    'action, adventure, sci-fi',
+    'Raiders of the Lost Ark',
+    '1981',
+    'https://ia.media-imdb.com/images/M/MV5BMjA0ODEzMTc1Nl5BMl5BanBnXkFtZTcwODM2MjAxNA@@._V1_SY1000_CR0,0,664,1000_AL_.jpg',
+    'action, adventure',
     'movie'
 );

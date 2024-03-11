@@ -6,8 +6,6 @@ const router = Router();
 
 router.use(cors({ origin: 'http://localhost:1234' }));
 
-// TODO:
-// security: sanitization & validation of query params
 router.get('/', async function(req, res) {
   try {
     const {

@@ -66,16 +66,15 @@ const MediaView = () => {
   const [yearOptions, setYearOptions] = useState<string[] | []>([])
   const mediaContainerRef = useRef<HTMLElement | null>(null)
 
+  // fetch genres and types on initial load to populate dropdowns
   useEffect(() => {
-    let ignore = false
     const handleFetchMediaMetaData = async () => {
       setLoading(true)
       setError(null)
       const { error, data }: FetchMediaMetadataResponse =
         await fetchMediaMetadata()
-      if (ignore) {
-        return
-      } else if (error || !data) {
+
+      if (error || !data) {
         setError(error)
       } else {
         setGenreOptions(data.genres ?? [])
@@ -84,9 +83,6 @@ const MediaView = () => {
       setLoading(false)
     }
     handleFetchMediaMetaData()
-    return () => {
-      ignore = true
-    }
   }, [])
 
   useEffect(() => {
