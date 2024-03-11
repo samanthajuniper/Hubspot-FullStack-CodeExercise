@@ -143,7 +143,7 @@ const MediaView = () => {
   }, [])
 
   return (
-    <Stack data-testid="media-view" flexDirection="column">
+    <div data-testid="media-view">
       {loading && (
         <Backdrop
           sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
@@ -205,7 +205,7 @@ const MediaView = () => {
           pageSize={pagination.pageSize}
         />
       )}
-    </Stack>
+    </div>
   )
 }
 
