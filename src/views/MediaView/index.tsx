@@ -126,6 +126,10 @@ const MediaView = () => {
       type: MediaFilterActionTypes.SET_LIMIT,
       payload: { limit: parseInt(limit) },
     })
+    dispatch({
+      type: MediaFilterActionTypes.SET_CURRENT_PAGE,
+      payload: { currentPage: 1 },
+    })
   }, [])
 
   // use when a new filter is applied
