@@ -1,14 +1,11 @@
-const express = require('express');
+import express from 'express';
+import mediaRouter from './routes/media/index.js';
+
 const app = express();
-const mediaRouter = require('./routes/media');
 const port = process.env.SERVER_PORT || 3001 ;
 
-app.get('/', (_, res) => {
-  res.json({ message: 'Hello World' });
-});
-
-app.use('/media', mediaRouter);
+app.use('/', mediaRouter);
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`App listening at http://localhost:${port}`);
 });
