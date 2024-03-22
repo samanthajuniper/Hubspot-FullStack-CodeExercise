@@ -206,14 +206,7 @@ const MediaView = () => {
           message={`Error: ${error} Please refresh to try again.`}
         />
       )}
-      <StyledGridContainer
-        ref={mediaContainerRef}
-        // sx={{
-        //   height: 'calc(100vh - 320px)',
-        //   overflowY: 'scroll',
-        //   overflowX: 'hidden',
-        // }}
-      >
+      <StyledGridContainer ref={mediaContainerRef}>
         <Grid
           container
           spacing={3}
