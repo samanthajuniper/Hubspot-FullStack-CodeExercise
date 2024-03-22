@@ -1,0 +1,6 @@
+@font-face {
+  font-family: LexendDecaLight;
+  src: url('../assets/fonts/Lexend_Deca/static/LexendDeca-Light.woff2');
+  format: ('woff2');
+  font-display: swap;
+}
