@@ -57,7 +57,7 @@ const StyledGridContainer = styled(Box)({
   overflowY: 'scroll',
   overflowX: 'hidden',
   // apply slideInFwdCenter
-  animation: `${slideInFwdCenter} 5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both`,
+  animation: `${slideInFwdCenter} 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both`,
   // from MDN: detect if a user has enabled a setting on their device to minimize the amount of non-essential motion
   '@media (prefers-reduced-motion: reduce)': {
     animation: 'none',
